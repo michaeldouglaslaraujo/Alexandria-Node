@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: false}));
 const rotas = require('../app/rotas/rotas')
 rotas(app);
 
-require('../controllers/authController')(app);
-require('../controllers/projectController')(app);
+require('../app/controllers/authController')(app);
+require('../app/controllers/projectController')(app);
 
 module.exports = app;
