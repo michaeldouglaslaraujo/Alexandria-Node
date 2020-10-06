@@ -109,7 +109,7 @@ router.post('/forgotpassword', async (req, res) => {
             to: email,
             from: 'mike_avril@hotmail.com',
             template: 'auth/forgot_password',
-            context: { token },
+            context: { token, email },
         }, (err) => {
             if (err)
             return res.status(400).send({ error: 'Cannot send forgot password email'});
