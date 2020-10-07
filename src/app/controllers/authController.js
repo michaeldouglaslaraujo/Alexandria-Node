@@ -62,25 +62,23 @@ router.post('/login', async (req,res) => {
      });
 });
 
-router.get('/login', async (req,res) => {
-    const { email, password } = req.body;
+//api/user/getuser
+router.get('/getuser', async (req,res) => {
+    const { token } = req.body;
 
-    const user = await User.findOne({ email }).select('+password');
+    try {
+        const user = await User.find(token).populate('token');
 
-    if(!user)
-        return res.status(412).send({error: 'User not found' });
+        return res.send({ user });
 
-    if(!await bcrypt.compare(password, user.password))
-        return res.status(412).send({ error: 'Invalid Password' });
+    } catch (err) {
+        return res.status(412).send({ error: 'Error Loading User' });
+    }
+//retorne os dados do usuarios com esse token ativo
+//busco o token no banco
+//trato o erro caso ele não tenha sido localizado (Erro 422, usuário deslogado)
+//achando o token retorno (do Objeto Usuário - JSON)
 
-    user.password = undefined;
-
-    const token = 
-
-    res.send({ 
-        user, 
-        token: generateToken({ id: user.id }),
-     });
 });
 
 // /api/User/forgotPassword
