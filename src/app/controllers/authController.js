@@ -58,13 +58,45 @@ router.post("/login", async (req, res) => {
 });
 
 //api/user/getuser
-router.get("/getuser/:token", async (req, res) => {
+router.get("/getuser", async (req, res) => {
   // A linha abaixo pega o token como parametro vindo da url
-  const token = req.params.token;
+  const token = req.headers.authorization;
 
-  console.log("token", token);
+  console.log(
+    "token",
+    token,
+    "req.headers.authorization",
+    req.headers.authorization
+  );
+
+  var decoded;
+  var gerete = generateToken({ id: user.id });
+  // try {
+
+  jwt.verify(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmN2NmZDg4OGI0MWI1MTNjYjg3OTlhZCIsImlhdCI6MTYwMjA4Njc0MSwiZXhwIjoxNjAyMzQ1OTQxfQ.f7eRy8hBv0TpX_ZHB2--8xsz5PbaUeEG4qRy9u4Gkhw",
+    authConfig.secret,
+    function (err, decoded) {
+      console.log("decoded", decoded, "err", err);
+    }
+  );
+  //   decoded = jwt.verify(token, authConfig.secret);
+
+  // console.log("decoded", decoded);
+  // } catch (e) {
+  //   return res.status(401).send("unauthorized");
+  // }
+
+  // // Fetch the user by id
+  // User.findOne({_id: userId}).then(function(user){
+  //     // Do something with the user
+  //     return res.send(200);
+  // });
+
   try {
-    const user = await User.find(token).populate("token");
+    var userId = decoded.id;
+    console.log("userId", userId);
+    const user = await User.find(userId).populate("id");
     console.log("user response", User.find(token).populate("token"));
     return res.send({ user });
   } catch (err) {
