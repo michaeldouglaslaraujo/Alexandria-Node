@@ -147,7 +147,10 @@ router.post('/newpassword', async (req, res) => {
 
         await user.save();
 
-        res.send();
+        res.send({ 
+            user, 
+            token: generateToken({ id: user.id }),
+         });
 
     }catch (err){
         res.status(400).send({ error: 'Error on forgot password, try again '});
