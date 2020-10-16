@@ -72,6 +72,22 @@ router.post("/login", async (req, res) => {
   });
 });
 
+//api/user/updateuser
+router.put("/updateuser/:id", async (req, res) => {
+  const { email, password } = req.body;
+
+  const id = req.params.id;
+  const userParams = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(id, userParams);
+
+    if (user) return res.send({ user });
+  } catch (err) {
+    return res.status(412).send({ error: "Error Updating User" });
+  }
+});
+
 //api/user/getuser
 router.get("/getuser", async (req, res) => {
   const decoded = verifyToken(req);
