@@ -4,6 +4,8 @@ const authMiddleware = require('../middlewares/auth')
 const Project = require('../models/Project');
 const Task = require('../models/Task');
 
+
+
 const router = express.Router();
 
 router.use(authMiddleware);
@@ -56,4 +58,4 @@ router.delete('/:projectId', async (req, res) => {
     }
 });
 
-module.exports = app => app.use('/projects', router);
+module.exports = app => app.use('/', router);

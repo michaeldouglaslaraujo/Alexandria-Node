@@ -46,6 +46,12 @@ const UserSchema = new mongoose.Schema(
             type: Date,
             select: false,
         },
+        avatarId:
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Avatar',
+            select: false,
+        },
         createdAt:
         {
             type: Date,

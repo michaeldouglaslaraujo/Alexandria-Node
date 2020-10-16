@@ -7,9 +7,17 @@ const mailer = require("../../modules/mailer");
 const authConfig = require("../../config/auth.json");
 
 const User = require("../models/user");
+const Avatar = require('../models/Avatar');
 const { use } = require("../../modules/mailer");
+const { Console } = require("console");
 
 const router = express.Router();
+
+async function buscarAvatar(){
+  const query = Avatar.find({});
+  const avatar = query.exec();
+  return avatar;
+}
 
 function generateToken(params = {}) {
   return jwt.sign(params, authConfig.secret, {
@@ -88,7 +96,7 @@ router.get("/getuser", async (req, res) => {
   //achando o token retorno (do Objeto Usuário - JSON)
 });
 
-// /api/User/forgotPassword
+// /api/user/forgotPassword
 router.post("/forgotpassword", async (req, res) => {
   const { email } = req.body;
 
@@ -134,7 +142,7 @@ router.post("/forgotpassword", async (req, res) => {
   }
 });
 
-// /api/User/newPassword
+// /api/user/newPassword
 router.post("/newpassword", async (req, res) => {
   const { email, token, password } = req.body;
 
@@ -168,6 +176,20 @@ router.post("/newpassword", async (req, res) => {
   }
 });
 
+//api/user/avatar/list
+router.get('/avatar/list', async (req, res) => {
+  const avatar = await buscarAvatar() 
+  try {
+    console.log(buscarAvatar());
+    return res.json(buscarAvatar());
+  } catch (err) {
+    console.log(err);
+    return res.status(412).send({ error: "Error Avatar List" });
+  }
+//return array com objeto avatar 
+});
+
+
 module.exports = (app) => app.use("/api/user", router);
 
-//api/user/updateuser/$(id)
+
