@@ -4,13 +4,11 @@ const authMiddleware = require('../middlewares/auth')
 const Project = require('../models/Project');
 const Task = require('../models/Task');
 
-
-
 const router = express.Router();
 
 router.use(authMiddleware);
 
-router.get('/', async(req, res) => {
+router.get('/', async(req, res) => {    
     try {
         const projects = await Project.find().populate('user');
 
@@ -32,14 +30,23 @@ router.get('/:projectId', async (req, res) => {
     }
 });
 
-router.post('/', async (req, res) => {
-    try{
-        const project = await Project.create({ ...req.body, user: req.userId});
+router.post('/', async (req, res) => {  
+try{
+    const {title, description, tasks} = req.body;
+    
+    const project = await Project.create({ title, description, user: req.userId});
 
-        return res.send({ project });
-    } catch (err) {
-        return res.status(412).send({ error: 'Error Creating new project' })
-    }
+    tasks.map(task => {
+        const projectTask = new Task ({...task, project: project._Id});
+        projectTask.save().then(task => project.tasks.push(task));
+    });
+
+    await project.save();
+        
+    return res.send({ project });
+}catch{
+    return res.status(412).send({ error: 'Error creating New Project'});
+}
 
 });
 
@@ -49,7 +56,7 @@ router.put('/:projectId', async (req, res) => {
 
 router.delete('/:projectId', async (req, res) => {
     try {
-        await Project.findByIdAndRemove(req.params.projectId);
+        await (await Project.findByIdAndRemove(req.params.projectId)).populate('user');
 
         return res.send();
 
@@ -58,4 +65,4 @@ router.delete('/:projectId', async (req, res) => {
     }
 });
 
-module.exports = app => app.use('/', router);
+module.exports = app => app.use('/projects', router);
