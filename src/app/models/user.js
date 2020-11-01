@@ -42,6 +42,11 @@ const UserSchema = new mongoose.Schema({
     ref: "Avatar",
     select: true,
   },
+  bookcaseId:{
+    type: String,
+    ref:"Project",
+    select: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

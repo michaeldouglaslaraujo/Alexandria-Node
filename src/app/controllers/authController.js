@@ -13,6 +13,9 @@ const { Console } = require("console");
 
 const router = express.Router();
 
+const Project = require('../models/Project');
+const Task = require('../models/Task');
+
 function generateToken(params = {}) {
   return jwt.sign(params, authConfig.secret, {
     expiresIn: 259200,
@@ -42,13 +45,21 @@ router.post("/signup", async (req, res) => {
 
     const user = await User.create(req.body);
 
+    const project = await Project.create({user: user._id});
+    console.log(project);
+
+    await project.save();
+    console.log(project);
+
     user.password = undefined;
 
     return res.send({
       user,
+      project,
       token: generateToken({ id: user.id }),
     });
   } catch (err) {
+    console.log(err);
     return res.status(400).send({ error: "Registration failed" });
   }
 });

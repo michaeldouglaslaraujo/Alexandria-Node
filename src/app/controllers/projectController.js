@@ -31,19 +31,22 @@ router.get('/:projectId', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {  
-try{
-    const {title, description, tasks} = req.body;
+    console.log(req.body);
+    try{
+    //const { title, description, tasks } = req.body;
+    //const project = await Project.create({ title, description, user: req.userId });
+
+    const {title, description, task} = req.body;
+    console.log(req.body);
+
+    const project = await Project.create({title, description, user: req.userId});
+    console.log(project);
+
     
-    const project = await Project.create({ title, description, user: req.userId});
-
-    tasks.map(task => {
-        const projectTask = new Task ({...task, project: project._Id});
-        projectTask.save().then(task => project.tasks.push(task));
-    });
-
     await project.save();
-        
+    console.log(project);
     return res.send({ project });
+    console.log(project);
 }catch{
     return res.status(412).send({ error: 'Error creating New Project'});
 }
@@ -56,7 +59,7 @@ router.put('/:projectId', async (req, res) => {
 
 router.delete('/:projectId', async (req, res) => {
     try {
-        await (await Project.findByIdAndRemove(req.params.projectId)).populate('user');
+        await Project.findByIdAndRemove(req.params.projectId);
 
         return res.send();
 
