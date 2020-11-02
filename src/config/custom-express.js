@@ -23,6 +23,6 @@ const rotas = require("../app/rotas/rotas");
 rotas(app);
 
 require("../app/controllers/authController")(app);
-require("../app/controllers/projectController")(app);
+require("../app/controllers/bookcaseController")(app);
 
 module.exports = app;

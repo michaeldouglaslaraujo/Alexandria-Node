@@ -13,8 +13,8 @@ const { Console } = require("console");
 
 const router = express.Router();
 
-const Project = require('../models/Project');
-const Task = require('../models/Task');
+const Bookcase = require('../models/bookcase');
+const Book = require('../models/book');
 
 function generateToken(params = {}) {
   return jwt.sign(params, authConfig.secret, {
@@ -45,17 +45,17 @@ router.post("/signup", async (req, res) => {
 
     const user = await User.create(req.body);
 
-    const project = await Project.create({user: user._id});
-    console.log(project);
+    const bookcase = await Bookcase.create({user: user._id});
+    console.log(bookcase);
 
-    await project.save();
-    console.log(project);
+    await bookcase.save();
+    console.log(bookcase);
 
     user.password = undefined;
 
     return res.send({
       user,
-      project,
+      bookcase,
       token: generateToken({ id: user.id }),
     });
   } catch (err) {

@@ -1,16 +1,16 @@
 const mongoose = require('../../database');
 const bcrypt = require('bcryptjs');
 
-const ProjectSchema = new mongoose.Schema(
+const BookcaseSchema = new mongoose.Schema(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref:'user',
             require: true,
         },
-        task: [{
+        book: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Task',
+            ref: 'Book',
         }],
         createdAt:
         {
@@ -20,6 +20,6 @@ const ProjectSchema = new mongoose.Schema(
     }
 );
 
-const Project = mongoose.model('Project', ProjectSchema);
+const Bookcase = mongoose.model('Bookcase', BookcaseSchema);
 
-module.exports = Project;
+module.exports = Bookcase;

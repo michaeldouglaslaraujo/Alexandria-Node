@@ -44,7 +44,7 @@ const UserSchema = new mongoose.Schema({
   },
   bookcaseId:{
     type: String,
-    ref:"Project",
+    ref:"Bookcase",
     select: true,
   },
   createdAt: {
