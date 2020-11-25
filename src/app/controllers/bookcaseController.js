@@ -87,6 +87,42 @@ router.put('/:bookcaseId', async (req, res) => {
 });
 
 
+//metdodo de histórico de leitura
+router.put('/:bookcaseId/:bookId', async (req, res) => {
+    try{
+        
+        const book = req.body;
+        
+        let bookcase = await Bookcase.findOne({_id: req.params.bookcaseId}).populate('book');
+        
+        if(book){
+            
+            const isbn = bookcase.book.find(item => item.isbn === book.isbn);
+            
+          if(isbn)
+          {
+            const bookBookcase = Book({ ... book, bookcase: req.params.bookcaseId});
+
+            await bookBookcase.save();
+     //Ajustar atualização
+            bookcase.book.push(bookBookcase);
+    
+            await bookcase.save();
+            return res.send({ bookcase });
+          } else {
+            return res.status(412).send({ error: ' Book already inclused in this Bookcase'});
+          }
+        };
+    
+    } catch (err) {
+        console.log(err);
+        return res.status(422).send({ error: 'Error updating book reading history'});
+    }
+    
+});
+
+
+
 router.delete('/:bookcaseId', async (req, res) => {
     try {
         await Bookcase.findByIdAndRemove(req.params.bookcaseId);
