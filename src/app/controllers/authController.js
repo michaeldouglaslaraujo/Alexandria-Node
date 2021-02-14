@@ -111,7 +111,10 @@ router.get("/getuser", async (req, res) => {
     var id = decoded.id;
     const user = await User.findOne({ _id: id });
 
-    if (user) return res.send({ user });
+    const bookcase = await Bookcase.findOne({user: user._id});
+    console.log(bookcase);
+ 
+    if (user) return res.send({ user, bookcase });
   } catch (err) {
     return res.status(412).send({ error: "Error Loading User" });
   }
