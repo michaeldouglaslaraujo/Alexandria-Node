@@ -77,8 +77,12 @@ router.post("/login", async (req, res) => {
 
   user.password = undefined;
 
+   const bookcase = await Bookcase.findOne({user: user._id});
+   console.log(bookcase);
+
   const token = res.send({
     user,
+    bookcase,
     token: generateToken({ id: user.id }),
   });
 });
