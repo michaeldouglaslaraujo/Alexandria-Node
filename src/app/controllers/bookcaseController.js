@@ -112,21 +112,19 @@ router.put('/:bookcaseId/:bookId', async (req, res) => {
         let bookcase = await Bookcase.findOne({_id: req.params.bookcaseId}).populate('book');
         
         if(book){
-            
-            const isbn = bookcase.book.find(item => item.isbn === book.isbn);
-            
-          if(isbn)
-          {
-            const bookBookcase = Book({ ... book, bookcase: req.params.bookcaseId});
 
-            await bookBookcase.save();
-     //Ajustar atualização
-            bookcase.book.push(bookBookcase);
-    
-            await bookcase.save(); 
+            //console.log('BOOK/ISBN', book.isbn);
+            //const isbn = bookcase.book.find(item => item.isbn === book.isbn);
+            //console.log('ISBN:', isbn);
+           
+        
+          const newbook = await Book.replaceOne(bookcase.book.find(item => item.isbn === book.isbn), book);
+          //console.log('Book:', book);  
+          //console.log('New Book:', newbook); 
+
+          return res.send({ newbook });
           } else {
             return res.status(412).send({ error: ' Book already inclused in this Bookcase'});
-          }
         };
     
     } catch (err) {
