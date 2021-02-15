@@ -6,13 +6,27 @@ const Book = require('../models/book');
 
 const router = express.Router();
 
+/*function consultbook(params = {}) {
+    const { book } = req.body;
+
+    document.getElementById = book;
+    let bookcase = await Bookcase.findOne({_id: req.params.bookcaseId}).populate('book');
+    const bookBookcase = Book({ ... book, bookcase: req.params.bookcaseId});
+    
+    book.array.forEach(element => {
+        
+    });
+    return 
+    ;
+  }*/
+
 router.use(authMiddleware);
 
 router.get('/', async(req, res) => {    
     try {
         const bookcases = await Bookcase.find().populate('user');
 
-        return res.send({ bookcases });
+        return res.send({ bookcases});
 
     } catch (err) {
         return res.status(412).send({ error: 'Error Loading Bookcase' });
@@ -23,7 +37,9 @@ router.get('/:bookcaseId', async (req, res) => {
     try {
         const bookcase = await Bookcase.findById(req.params.bookcaseId).populate('user');
 
-        return res.send({ bookcase });
+        const books = await Bookcase.findOne({_id: req.params.bookcaseId}).populate('book');
+
+        return res.send({ bookcase, books:[...books.book]});
 
     } catch (err) {
         return res.status(412).send({ error: 'Error Loading Bookcase' });
@@ -122,6 +138,15 @@ router.put('/:bookcaseId/:bookId', async (req, res) => {
 });
 
 
+router.get('/recommended', async (req, res) => {
+    try {
+
+        
+
+    } catch (err) {
+        return res.status(412).send({ error: 'Error' });
+    }
+});
 
 router.delete('/:bookcaseId', async (req, res) => {
     try {

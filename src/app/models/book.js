@@ -53,13 +53,14 @@ const BookSchema = new mongoose.Schema(
         },		
 		pageRead:
 		{
-            type: String,
+            type: Number,
             require: false,
         },		
 		recommended:
 		{
             type: String,
-			require: false,
+            require: false,
+            lowercase: true,
         },		
 		bookcase:
         {
