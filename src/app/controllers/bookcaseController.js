@@ -123,8 +123,7 @@ router.put('/:bookcaseId/:bookId', async (req, res) => {
      //Ajustar atualização
             bookcase.book.push(bookBookcase);
     
-            await bookcase.save();
-            return res.send({ bookcase });  
+            await bookcase.save(); 
           } else {
             return res.status(412).send({ error: ' Book already inclused in this Bookcase'});
           }
