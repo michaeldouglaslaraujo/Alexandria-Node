@@ -1,24 +1,11 @@
-const express = require('express');
+    const express = require('express');
 const authMiddleware = require('../middlewares/auth')
 
 const Bookcase = require('../models/bookcase');
 const Book = require('../models/book');
+const { pipeline } = require('nodemailer/lib/xoauth2');
 
 const router = express.Router();
-
-/*function consultbook(params = {}) {
-    const { book } = req.body;
-
-    document.getElementById = book;
-    let bookcase = await Bookcase.findOne({_id: req.params.bookcaseId}).populate('book');
-    const bookBookcase = Book({ ... book, bookcase: req.params.bookcaseId});
-    
-    book.array.forEach(element => {
-        
-    });
-    return 
-    ;
-  }*/
 
 router.use(authMiddleware);
 
@@ -68,17 +55,12 @@ router.post('/', async (req, res) => {
 
 router.put('/:bookcaseId', async (req, res) => {
     try{
-        
         const book = req.body;
-        //console.log("Req.body", req.body);
-    
+                
         let bookcase = await Bookcase.findOne({_id: req.params.bookcaseId}).populate('book');
-        //console.log("Params", req.params.bookcaseId);
-        //console.log("Bookcase", bookcase);
+        
         if(book){
-            console.log('BOOK/ISBN', book.isbn);
             const isbn = bookcase.book.find(item => item.isbn === book.isbn);
-            console.log('ISBN:', isbn);
 
           if(!isbn)
           {
@@ -102,7 +84,6 @@ router.put('/:bookcaseId', async (req, res) => {
     
 });
 
-
 //metdodo de histórico de leitura
 router.put('/:bookcaseId/:bookId', async (req, res) => {
     try{
@@ -112,15 +93,8 @@ router.put('/:bookcaseId/:bookId', async (req, res) => {
         let bookcase = await Bookcase.findOne({_id: req.params.bookcaseId}).populate('book');
         
         if(book){
-
-            //console.log('BOOK/ISBN', book.isbn);
-            //const isbn = bookcase.book.find(item => item.isbn === book.isbn);
-            //console.log('ISBN:', isbn);
-           
         
           const newbook = await Book.replaceOne(bookcase.book.find(item => item.isbn === book.isbn), book);
-          //console.log('Book:', book);  
-          //console.log('New Book:', newbook); 
 
           return res.send({ newbook });
           } else {
@@ -134,17 +108,6 @@ router.put('/:bookcaseId/:bookId', async (req, res) => {
     
 });
 
-
-router.get('/recommended', async (req, res) => {
-    try {
-
-        
-
-    } catch (err) {
-        return res.status(412).send({ error: 'Error' });
-    }
-});
-
 router.delete('/:bookcaseId', async (req, res) => {
     try {
         await Bookcase.findByIdAndRemove(req.params.bookcaseId);
@@ -156,4 +119,4 @@ router.delete('/:bookcaseId', async (req, res) => {
     }
 });
 
-module.exports = app => app.use('/bookcases', router);
+module.exports = (app) => app.use('/bookcases', router);

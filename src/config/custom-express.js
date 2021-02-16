@@ -24,5 +24,6 @@ rotas(app);
 
 require("../app/controllers/authController")(app);
 require("../app/controllers/bookcaseController")(app);
+require("../app/controllers/recommendedController")(app);
 
 module.exports = app;

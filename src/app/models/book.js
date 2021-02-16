@@ -58,7 +58,7 @@ const BookSchema = new mongoose.Schema(
         },		
 		recommended:
 		{
-            type: String,
+            type: Number,
             require: false,
             lowercase: true,
         },		
